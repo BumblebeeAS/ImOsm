@@ -8,8 +8,10 @@ MarkItem::MarkItem() {
   _ry.resize(int(360.0 / _dphi) + 1);
 }
 
-MarkItem::MarkItem(const GeoCoords &coords, const std::string &text)
+MarkItem::MarkItem(const GeoCoords &coords,
+                   const std::string &name, const std::string &text)
     : _geoCoords{coords}
+    , _name{name}
     , _text{text} {
   _osmCoords = _geoCoords.toOsmCoords();
   _rx.resize(int(360.0 / _dphi) + 1);
@@ -47,7 +49,7 @@ void MarkItem::paint() {
 
   if (_style.textEnabled) {
     ImGui::PushStyleColor(ImGuiCol_Text, _style.markerFill);
-    ImGui::PushID(_text.c_str());
+    ImGui::PushID(_name.c_str());
     ImPlot::PlotText(_text.c_str(),
                      _osmCoords.x,
                      _osmCoords.y,

@@ -15,7 +15,7 @@ struct TileGrabberWidget::Ui {
   std::string dirname{"tiles"};
   int requestLimit{10};
   const bool preload{false};
-  int minZ{0}, maxZ{18};
+  int minZ{0}, maxZ{20};
   int tileCount{0}, tileTotal{};
   float progress{};
 };
@@ -102,7 +102,8 @@ void ImOsm::TileGrabberWidget::paint() {
                    _mapPlot->maxLon(), _ui->minZ, _ui->maxZ);
     _tileGrabber = std::make_unique<TileGrabber>(
         std::make_shared<TileSourceUrlCustom>(_ui->requestLimit, _ui->preload,
-                                              _ui->url),
+                                              _ui->url,
+                                              "tiles"),
         std::make_shared<TileSaverSubDir>(_ui->dirname));
     _tileGrabber->grab(_mapPlot->minLat(), _mapPlot->maxLat(),
                        _mapPlot->minLon(), _mapPlot->maxLon(), _ui->minZ,

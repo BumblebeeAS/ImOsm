@@ -7,8 +7,9 @@
 namespace ImOsm {
 
 struct MapPlot::Impl {
-  constexpr static const ImPlotFlags plotFlags{ImPlotFlags_Equal |
-                                               ImPlotFlags_NoLegend};
+  constexpr static const ImPlotFlags plotFlags{
+    ImPlotFlags_Equal |                                               ImPlotFlags_NoLegend |
+    ImPlotFlags_Crosshairs};
 
   constexpr static const ImPlotAxisFlags xFlags{
       ImPlotAxisFlags_NoLabel | ImPlotAxisFlags_NoGridLines |
@@ -86,9 +87,9 @@ void MapPlot::paint() {
     _tilesNum = POW2[_zoom];
     _tileSize = 1.0 / float(_tilesNum);
 
-    const auto minMaxLat{std::minmax(y2lat(_minY * _tilesNum, _zoom),
+    const std::pair<double, float> minMaxLat{std::minmax(y2lat(_minY * _tilesNum, _zoom),
                                      y2lat(_maxY * _tilesNum, _zoom))};
-    const auto minMaxLon{std::minmax(x2lon(_minX * _tilesNum, _zoom),
+    const std::pair<double, double> minMaxLon{std::minmax(x2lon(_minX * _tilesNum, _zoom),
                                      x2lon(_maxX * _tilesNum, _zoom))};
 
     _minLat = minMaxLat.first;

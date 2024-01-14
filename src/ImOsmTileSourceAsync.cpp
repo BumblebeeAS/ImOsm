@@ -3,6 +3,7 @@
 #include "ImOsmTile.h"
 #include "ImOsmTileAsync.h"
 #include <algorithm>
+#include <iostream>
 
 namespace ImOsm {
 using namespace std::chrono_literals;
@@ -30,6 +31,7 @@ bool TileSourceAsync::request(int z, int x, int y) {
                                              this, z, x, y)});
     return true;
   }
+  std::cout << "TileSourceAsync::request failed" << std::endl;
   return false;
 }
 

@@ -15,6 +15,7 @@ public:
   ~MarkEditorWidget();
 
   void paint();
+  std::vector<GeoCoords> getMarkPoints() const;
 
 private:
   void paint_latLonInput();
@@ -22,7 +23,8 @@ private:
   void paint_markNameInput();
   void paint_addMarkBtn();
   void paint_markTable();
-  void paint_markTableRow(const MarkStorage::ItemNode &item);
+  void paint_markTableRow(const MarkStorage::ItemNode &item,
+  int index);
 
   std::shared_ptr<RichMapPlot> _plot;
   std::shared_ptr<MarkStorage> _storage;

@@ -1,5 +1,6 @@
 #pragma once
 #include "implot.h"
+#include <iostream>
 #include <algorithm>
 #include <array>
 #include <latlon.h>
@@ -15,14 +16,14 @@ inline constexpr double DEG{180.0 / std::numbers::pi_v<double>};
 inline constexpr int POW2[]{
     (1 << 0),  (1 << 1),  (1 << 2),  (1 << 3),  (1 << 4),  (1 << 5),  (1 << 6),
     (1 << 7),  (1 << 8),  (1 << 9),  (1 << 10), (1 << 11), (1 << 12), (1 << 13),
-    (1 << 14), (1 << 15), (1 << 16), (1 << 17), (1 << 18)};
+    (1 << 14), (1 << 15), (1 << 16), (1 << 17), (1 << 18), (1 << 19), (1 << 20)};
 
 inline constexpr double MIN_LAT{-85.0};
 inline constexpr double MAX_LAT{+85.0};
 inline constexpr double MIN_LON{-179.9};
 inline constexpr double MAX_LON{+179.9};
 inline constexpr int MIN_ZOOM{0};
-inline constexpr int MAX_ZOOM{18};
+inline constexpr int MAX_ZOOM{20};
 
 inline double lon2x(const double lon, int z = 0) {
   return (lon + 180.0) / 360.0 * double(POW2[z]);
@@ -33,12 +34,19 @@ inline double lat2y(const double lat, int z = 0) {
 }
 
 inline double x2lon(const double x, int z = 0) {
-  return x / double(POW2[z]) * 360.0 - 180.0;
+  auto lon = std::max(
+    MIN_LON,
+    std::min(
+      x / double(POW2[z]) * 360.0 - 180.0, MAX_LON));
+  return lon;
 }
 
 inline double y2lat(const double y, const int z = 0) {
   const double n{PI - PI2 * y / double(POW2[z])};
-  return DEG * atan(0.5 * (exp(n) - exp(-n)));
+  auto lat = std::max(MIN_LAT,
+    std::min(
+      DEG * atan(0.5 * (exp(n) - exp(-n))), MAX_LAT));
+  return lat;
 }
 
 inline int lon2tx(const double lon, const int z) {

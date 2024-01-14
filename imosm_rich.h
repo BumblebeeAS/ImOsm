@@ -4,6 +4,8 @@
 #include <ImOsmRichDistanceCalcWidget.h>
 #include <ImOsmRichMapPlot.h>
 #include <ImOsmRichMarkEditorWidget.h>
+#include <ImOsmRichMarkViewerWidget.h>
 #include <ImOsmRichMarkItem.h>
+#include <ImOsmRichGpsPointWidget.h>
 #include <ImOsmRichMarkItemWidget.h>
 #include <ImOsmRichMarkStorage.h>

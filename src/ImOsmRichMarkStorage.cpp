@@ -1,6 +1,6 @@
 #include "ImOsmRichMarkStorage.h"
 #include "ImOsmRichMarkItem.h"
-
+#include <iostream>
 namespace ImOsm {
 namespace Rich {
 MarkStorage::MarkStorage() = default;
@@ -11,12 +11,25 @@ std::shared_ptr<MarkItem> MarkStorage::findMark(const std::string &name) const {
   const auto it{std::find_if(_markItems.begin(),
                              _markItems.end(),
                              [name](const ItemNode &node) {
-                               return node.ptr->text() == name;
+                               return node.ptr->name() == name;
                              })};
   if (it != _markItems.end()) {
     return it->ptr;
   }
   return nullptr;
+}
+
+void MarkStorage::rmMark(const std::string &name) {
+  const auto it{std::find_if(_markItems.begin(),
+                             _markItems.end(),
+                             [name](const ItemNode &node) {
+                               return node.ptr->name() == name;
+                             })};
+  if (it != _markItems.end()) {
+    it->rmFlag = true;
+  } else {
+    std::cout << "MarkStorage::rmMark: mark not found: " << name << std::endl;
+  }
 }
 
 GeoCoords MarkStorage::findMark(const std::string &name, bool &ok) const {
@@ -105,8 +118,10 @@ void MarkStorage::saveState(mINI::INIStructure &ini) const {
   }
 }
 
-void MarkStorage::addMark(const GeoCoords &coords, const std::string &name) {
-  _markItems.push_back({std::make_shared<MarkItem>(coords, name)});
+void MarkStorage::addMark(const GeoCoords &coords,
+                          const std::string &id,
+                          const std::string &name) {
+  _markItems.push_back({std::make_shared<MarkItem>(coords, id, name)});
 }
 
 void MarkStorage::rmMarks() {

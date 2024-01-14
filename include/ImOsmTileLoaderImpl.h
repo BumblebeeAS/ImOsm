@@ -14,22 +14,25 @@ class TileLoaderOsmMap : public TileLoader {
 public:
   TileLoaderOsmMap(const int requestLimit = URL_REQUEST_LIMIT)
       : TileLoader{
-            std::make_shared<TileSourceUrlOsm>(requestLimit, MAP_PRELOAD)} {}
+            std::make_shared<TileSourceUrlOsm>(requestLimit, MAP_PRELOAD,
+              "tiles")} {}
 };
 
 class TileLoaderArcMap : public TileLoader {
 public:
   TileLoaderArcMap(const int requestLimit = URL_REQUEST_LIMIT)
       : TileLoader{
-            std::make_shared<TileSourceUrlArc>(requestLimit, MAP_PRELOAD)} {}
+            std::make_shared<TileSourceUrlArc>(requestLimit, MAP_PRELOAD,
+              "tiles")} {}
 };
 
 class TileLoaderUrlMap : public TileLoader {
 public:
   TileLoaderUrlMap(const std::string &url_tpl,
+                   const std::string &cache_dir,
                    const int requestLimit = URL_REQUEST_LIMIT)
       : TileLoader{std::make_shared<TileSourceUrlCustom>(
-            requestLimit, MAP_PRELOAD, url_tpl)} {}
+            requestLimit, MAP_PRELOAD, url_tpl, cache_dir)} {}
 };
 
 class TileLoaderFsMap : public TileLoader {

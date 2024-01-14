@@ -1,6 +1,7 @@
 #include "ImOsmTileSaver.h"
 #include "ImOsmITile.h"
 #include <fstream>
+#include <iostream>
 #include <string>
 
 namespace ImOsm {
@@ -26,9 +27,11 @@ bool TileSaver::save(std::shared_ptr<ITile> tile) const {
   std::ofstream file_maker(path.append(fileName(tile)),
                            std::fstream::out | std::fstream::binary);
   if (file_maker) {
+    std::cout << "TileSaver::save: " << path << std::endl;
     file_maker.write(tile->rawBlob(), tile->rawBlobSize());
     return true;
   }
+  std::cout << "TileSaver:: can't open file " << path << std::endl;
   return false;
 }
 

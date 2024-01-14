@@ -11,8 +11,10 @@ struct TileSourceWidget::Ui {
   int requestLimit{10};
 };
 
-TileSourceWidget::TileSourceWidget(std::shared_ptr<MapPlot> mapPlot)
+TileSourceWidget::TileSourceWidget(std::shared_ptr<MapPlot> mapPlot,
+                                   std::string cache_dir)
     : _mapPlot{mapPlot}, _ui{std::make_unique<Ui>()} {
+  _cache_dir = cache_dir;
   updateTileLoader();
 }
 
@@ -69,7 +71,9 @@ void TileSourceWidget::paint() {
 void TileSourceWidget::updateTileLoader() {
   if (_ui->source.starts_with("http")) {
     _tileLoader =
-        std::make_shared<TileLoaderUrlMap>(_ui->source, _ui->requestLimit);
+        std::make_shared<TileLoaderUrlMap>(_ui->source,
+        _cache_dir,
+        _ui->requestLimit);
   } else if (!_ui->source.empty()) {
     _tileLoader =
         std::make_shared<TileLoaderFsMap>(_ui->source, _ui->requestLimit);

@@ -11,6 +11,7 @@ class MarkItem;
 
 class MarkStorage {
   friend class MarkEditorWidget;
+  friend class MarkViewerWidget;
 
 public:
   MarkStorage();
@@ -28,7 +29,9 @@ public:
   }
 
 private:
-  void addMark(const GeoCoords &coords, const std::string &name);
+  void addMark(const GeoCoords &coords,
+                          const std::string &id, const std::string &name);
+  void rmMark(const std::string &name);
   void rmMarks();
   bool handlePickState();
   bool handleLoadState();
@@ -48,6 +51,7 @@ private:
   // Mark Items
   struct ItemNode {
     std::shared_ptr<MarkItem> ptr;
+    mutable bool visible{true};
     mutable bool rmFlag{false};
   };
   std::vector<ItemNode> _markItems;

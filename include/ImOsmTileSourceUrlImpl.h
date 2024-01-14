@@ -8,7 +8,8 @@ namespace ImOsm {
 class TileSourceUrlCustom : public TileSourceUrl {
 public:
   TileSourceUrlCustom(int request_limit, bool preload,
-                      const std::string &url_tpl);
+                      const std::string &url_tpl,
+                      const std::string &cachePath);
 
 protected:
   virtual std::string makeUrl(int z, int x, int y) override;
@@ -21,21 +22,23 @@ private:
 
 class TileSourceUrlOsm : public TileSourceUrl {
 public:
-  TileSourceUrlOsm(int request_limit, bool preload);
+  TileSourceUrlOsm(int request_limit, bool preload,
+                   const std::string &cachePath);
 
 protected:
   virtual std::string makeUrl(int z, int x, int y) override;
 
 public:
   inline static const char URL_TPL[]{
-      "https://a.tile.openstreetmap.org/$Z$/$X$/$Y$.png"};
+      "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"};
 };
 
 // -----------------------------------------------------------------------------
 
 class TileSourceUrlArcImagery : public TileSourceUrl {
 public:
-  TileSourceUrlArcImagery(int request_limit, bool preload);
+  TileSourceUrlArcImagery(int request_limit, bool preload,
+                          const std::string &cachePath);
 
 protected:
   virtual std::string makeUrl(int z, int x, int y) override;
@@ -43,7 +46,7 @@ protected:
 public:
   inline static const char URL_TPL[]{
       "https://server.arcgisonline.com/ArcGIS/rest/services/"
-      "World_Imagery/MapServer/tile/$Z$/$Y$/$X$"};
+      "World_Imagery/MapServer/tile/{z}/{y}/{x}"};
 };
 using TileSourceUrlArc = TileSourceUrlArcImagery;
 

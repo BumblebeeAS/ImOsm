@@ -42,7 +42,7 @@ void MarkEditorWidget::paint() {
 
   if (_ui->isMarkAdd) {
     _ui->isMarkAdd = false;
-    _storage->addMark(_ui->latLonInput, _ui->markNameInputText);
+    _storage->addMark(_ui->latLonInput, _ui->markNameInputText, _ui->markNameInputText);
     _plot->addItem(_storage->_markItems.back().ptr);
   }
 
@@ -55,6 +55,13 @@ void MarkEditorWidget::paint() {
   if (_storage->handlePickState()) {
     _ui->latLonInput = _storage->_pickCoords;
   }
+}
+
+std::vector<GeoCoords> MarkEditorWidget::getMarkPoints() const {
+  auto coords{std::vector<GeoCoords>{}};
+  std::for_each(_storage->_markItems.begin(), _storage->_markItems.end(),
+                [&coords](auto &item) { coords.push_back(item.ptr->geoCoords()); });
+  return coords;
 }
 
 void MarkEditorWidget::paint_latLonInput() {
@@ -91,33 +98,37 @@ void MarkEditorWidget::paint_addMarkBtn() {
 }
 
 void MarkEditorWidget::paint_markTable() {
-  static const int tableCols{6};
+  static const int tableCols{7};
   static const ImGuiTableColumnFlags colFlags{ImGuiTableColumnFlags_WidthFixed};
 
   if (ImGui::BeginTable("MarkTabe", tableCols)) {
     ImGui::TableSetupColumn("Name", colFlags, 100);
     ImGui::TableSetupColumn("Lat", colFlags, 100);
     ImGui::TableSetupColumn("Lon", colFlags, 100);
-    ImGui::TableSetupColumn("Radius", colFlags, 100);
+    ImGui::TableSetupColumn("Radius", colFlags, 70);
     ImGui::TableSetupColumn("Setup", colFlags, 50);
     ImGui::TableSetupColumn("Delete", colFlags, 50);
+    ImGui::TableSetupColumn("Swap", colFlags, 50);
     ImGui::TableHeadersRow();
 
     _storage->rmMarks();
 
     const auto &markItems{_storage->markItems()};
-    std::for_each(markItems.begin(), markItems.end(), [this](auto &item) {
+    int index{};
+    std::for_each(markItems.begin(), markItems.end(), [this, &index](auto &item) {
       ImGui::TableNextRow();
       ImGui::PushID(item.ptr.get());
-      paint_markTableRow(item);
+      paint_markTableRow(item, index);
       ImGui::PopID();
+      index++;
     });
 
     ImGui::EndTable();
   }
 }
 
-void MarkEditorWidget::paint_markTableRow(const MarkStorage::ItemNode &item) {
+void MarkEditorWidget::paint_markTableRow(const MarkStorage::ItemNode &item,
+                                          int index) {
   // Name
   ImGui::TableNextColumn();
   ImGui::TextUnformatted(item.ptr->text().c_str());
@@ -168,6 +179,20 @@ void MarkEditorWidget::paint_markTableRow(const MarkStorage::ItemNode &item) {
   if (ImGui::Button("Delete")) {
     item.rmFlag = true;
   }
+
+  //Swap
+  ImGui::TableNextColumn();
+  // up button
+  if (index != 0 && ImGui::Button("-")) {
+    std::cout << "swapping with previous" << std::endl;
+    std::swap(_storage->_markItems[index], _storage->_markItems[index - 1]);
+  }
+  ImGui::SameLine();
+  if (index != _storage->_markItems.size() - 1 && ImGui::Button("+")) {
+    std::cout << "swapping with next" << std::endl;
+    std::swap(_storage->_markItems[index], _storage->_markItems[index + 1]);
+  }
+
 }
 } // namespace Rich
 } // namespace ImOsm

@@ -40,7 +40,6 @@ TileGrabber::onLaunchGrab(const double minLat, const double maxLat,
         }
         if (!_source->canRequest()) {
           tiles.clear();
-          _source->takeAll(tiles);
           std::for_each(std::begin(tiles), std::end(tiles),
                         [this](const auto &tile) {
                           if (tile->isDummy()) {

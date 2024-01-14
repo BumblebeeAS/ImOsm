@@ -66,7 +66,7 @@ private:
   std::unique_ptr<Impl> _impl;
   std::shared_ptr<ITileLoader> _loader, _prevLoader;
 
-  float _tilePixels{256.0};
+  float _tilePixels{480.0};
   float _tileSize{};
   float _minLat{}, _maxLat{};
   float _minLon{}, _maxLon{};

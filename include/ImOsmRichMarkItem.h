@@ -23,7 +23,8 @@ public:
   };
 
   MarkItem();
-  MarkItem(const GeoCoords &coords, const std::string &text);
+  MarkItem(const GeoCoords &coords, const std::string &name,
+           const std::string &text);
   virtual ~MarkItem() override;
 
   virtual bool inBounds(float minLat,
@@ -57,6 +58,7 @@ public:
 
   inline void setText(const std::string &text) { _text = text; }
   inline const std::string &text() const { return _text; }
+  inline const std::string &name() const { return _name; }
 
   inline void setStyle(const Style &style) { _style = style; }
   inline const Style &style() const { return _style; }
@@ -70,7 +72,7 @@ private:
   bool _enabled{true};
   GeoCoords _geoCoords{};
   OsmCoords _osmCoords{};
-  std::string _text;
+  std::string _text, _name;
   double _latTL{}, _latTR{}, _latBL{}, _latBR{};
   double _lonTL{}, _lonTR{}, _lonBL{}, _lonBR{};
   float _r{};

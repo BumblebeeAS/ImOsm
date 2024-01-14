@@ -1,6 +1,9 @@
 #include "ImOsmTile.h"
 #include <GL/gl.h>
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#endif
 
 namespace ImOsm {
 ImOsm::Tile::Tile(int z, int x, int y, const std::vector<std::byte> &rawBlob,
